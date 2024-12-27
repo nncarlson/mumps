@@ -1,0 +1,177 @@
+Only in mumps-src/include: mumps_int_def.h
+diff -ru MUMPS_5.7.3/src/cfac_b.F mumps-src/src/cfac_b.F
+--- MUMPS_5.7.3/src/cfac_b.F	2024-07-15 05:44:52.000000000 -0600
++++ mumps-src/src/cfac_b.F	2024-12-27 16:29:04.852657637 -0700
+@@ -32,7 +32,7 @@
+       USE CMUMPS_BUF, ONLY : CMUMPS_BUF_ALLOC_CB, CMUMPS_BUF_DEALL_CB
+       USE CMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
+       USE MUMPS_PIVNUL_MOD, ONLY : PIVNUL_LIST_STRUCT_T
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE CMUMPS_TPS_M
+       USE CMUMPS_FAC_OMP_M
+@@ -527,7 +527,7 @@
+       USE CMUMPS_FAC2_LDLT_M
+       USE CMUMPS_FAC1_LU_M
+       USE CMUMPS_FAC2_LU_M
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE CMUMPS_TPS_M
+       USE CMUMPS_STRUC_DEF, ONLY : CMUMPS_ROOT_STRUC
+diff -ru MUMPS_5.7.3/src/cfac_par_m.F mumps-src/src/cfac_par_m.F
+--- MUMPS_5.7.3/src/cfac_par_m.F	2024-07-15 05:44:52.000000000 -0600
++++ mumps-src/src/cfac_par_m.F	2024-12-27 16:30:31.309298222 -0700
+@@ -41,7 +41,6 @@
+       USE CMUMPS_FAC2_LDLT_M
+       USE CMUMPS_FAC1_LU_M
+       USE CMUMPS_FAC2_LU_M
+-      USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE CMUMPS_TPS_M
+       USE CMUMPS_STRUC_DEF, ONLY : CMUMPS_ROOT_STRUC
+diff -ru MUMPS_5.7.3/src/csol_omp_m.F mumps-src/src/csol_omp_m.F
+--- MUMPS_5.7.3/src/csol_omp_m.F	2024-07-15 05:44:51.000000000 -0600
++++ mumps-src/src/csol_omp_m.F	2024-12-27 16:28:40.866647624 -0700
+@@ -299,7 +299,7 @@
+      &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
+      &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
+       USE CMUMPS_STRUC_DEF, ONLY : CMUMPS_L0OMPFAC_T
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       IMPLICIT NONE
+       INTEGER, INTENT( in ) :: N, MTYPE, NRHS, SLAVEF, LIW
+       INTEGER, INTENT( in ) :: IW(LIW)
+diff -ru MUMPS_5.7.3/src/dfac_b.F mumps-src/src/dfac_b.F
+--- MUMPS_5.7.3/src/dfac_b.F	2024-07-15 05:44:50.000000000 -0600
++++ mumps-src/src/dfac_b.F	2024-12-27 16:24:35.790327702 -0700
+@@ -32,7 +32,7 @@
+       USE DMUMPS_BUF, ONLY : DMUMPS_BUF_ALLOC_CB, DMUMPS_BUF_DEALL_CB
+       USE DMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
+       USE MUMPS_PIVNUL_MOD, ONLY : PIVNUL_LIST_STRUCT_T
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE DMUMPS_TPS_M
+       USE DMUMPS_FAC_OMP_M
+@@ -531,7 +531,7 @@
+       USE DMUMPS_FAC2_LDLT_M
+       USE DMUMPS_FAC1_LU_M
+       USE DMUMPS_FAC2_LU_M
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE DMUMPS_TPS_M
+       USE DMUMPS_STRUC_DEF, ONLY : DMUMPS_ROOT_STRUC
+diff -ru MUMPS_5.7.3/src/dfac_par_m.F mumps-src/src/dfac_par_m.F
+--- MUMPS_5.7.3/src/dfac_par_m.F	2024-07-15 05:44:50.000000000 -0600
++++ mumps-src/src/dfac_par_m.F	2024-12-27 16:24:35.791327744 -0700
+@@ -41,7 +41,6 @@
+       USE DMUMPS_FAC2_LDLT_M
+       USE DMUMPS_FAC1_LU_M
+       USE DMUMPS_FAC2_LU_M
+-      USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE DMUMPS_TPS_M
+       USE DMUMPS_STRUC_DEF, ONLY : DMUMPS_ROOT_STRUC
+diff -ru MUMPS_5.7.3/src/dsol_omp_m.F mumps-src/src/dsol_omp_m.F
+--- MUMPS_5.7.3/src/dsol_omp_m.F	2024-07-15 05:44:49.000000000 -0600
++++ mumps-src/src/dsol_omp_m.F	2024-12-27 16:24:35.791327744 -0700
+@@ -299,7 +299,7 @@
+      &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
+      &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
+       USE DMUMPS_STRUC_DEF, ONLY : DMUMPS_L0OMPFAC_T
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       IMPLICIT NONE
+       INTEGER, INTENT( in ) :: N, MTYPE, NRHS, SLAVEF, LIW
+       INTEGER, INTENT( in ) :: IW(LIW)
+diff -ru MUMPS_5.7.3/src/sfac_b.F mumps-src/src/sfac_b.F
+--- MUMPS_5.7.3/src/sfac_b.F	2024-07-15 05:44:48.000000000 -0600
++++ mumps-src/src/sfac_b.F	2024-12-27 16:29:57.461872950 -0700
+@@ -32,7 +32,7 @@
+       USE SMUMPS_BUF, ONLY : SMUMPS_BUF_ALLOC_CB, SMUMPS_BUF_DEALL_CB
+       USE SMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
+       USE MUMPS_PIVNUL_MOD, ONLY : PIVNUL_LIST_STRUCT_T
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE SMUMPS_TPS_M
+       USE SMUMPS_FAC_OMP_M
+@@ -531,7 +531,7 @@
+       USE SMUMPS_FAC2_LDLT_M
+       USE SMUMPS_FAC1_LU_M
+       USE SMUMPS_FAC2_LU_M
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE SMUMPS_TPS_M
+       USE SMUMPS_STRUC_DEF, ONLY : SMUMPS_ROOT_STRUC
+diff -ru MUMPS_5.7.3/src/sfac_par_m.F mumps-src/src/sfac_par_m.F
+--- MUMPS_5.7.3/src/sfac_par_m.F	2024-07-15 05:44:48.000000000 -0600
++++ mumps-src/src/sfac_par_m.F	2024-12-27 16:30:40.647691449 -0700
+@@ -41,7 +41,6 @@
+       USE SMUMPS_FAC2_LDLT_M
+       USE SMUMPS_FAC1_LU_M
+       USE SMUMPS_FAC2_LU_M
+-      USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE SMUMPS_TPS_M
+       USE SMUMPS_STRUC_DEF, ONLY : SMUMPS_ROOT_STRUC
+diff -ru MUMPS_5.7.3/src/ssol_omp_m.F mumps-src/src/ssol_omp_m.F
+--- MUMPS_5.7.3/src/ssol_omp_m.F	2024-07-15 05:44:48.000000000 -0600
++++ mumps-src/src/ssol_omp_m.F	2024-12-27 16:29:31.204767293 -0700
+@@ -299,7 +299,7 @@
+      &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
+      &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
+       USE SMUMPS_STRUC_DEF, ONLY : SMUMPS_L0OMPFAC_T
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       IMPLICIT NONE
+       INTEGER, INTENT( in ) :: N, MTYPE, NRHS, SLAVEF, LIW
+       INTEGER, INTENT( in ) :: IW(LIW)
+diff -ru MUMPS_5.7.3/src/zfac_b.F mumps-src/src/zfac_b.F
+--- MUMPS_5.7.3/src/zfac_b.F	2024-07-15 05:44:53.000000000 -0600
++++ mumps-src/src/zfac_b.F	2024-12-27 16:27:54.706703875 -0700
+@@ -32,7 +32,7 @@
+       USE ZMUMPS_BUF, ONLY : ZMUMPS_BUF_ALLOC_CB, ZMUMPS_BUF_DEALL_CB
+       USE ZMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
+       USE MUMPS_PIVNUL_MOD, ONLY : PIVNUL_LIST_STRUCT_T
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE ZMUMPS_TPS_M
+       USE ZMUMPS_FAC_OMP_M
+@@ -527,7 +527,7 @@
+       USE ZMUMPS_FAC2_LDLT_M
+       USE ZMUMPS_FAC1_LU_M
+       USE ZMUMPS_FAC2_LU_M
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE ZMUMPS_TPS_M
+       USE ZMUMPS_STRUC_DEF, ONLY : ZMUMPS_ROOT_STRUC
+diff -ru MUMPS_5.7.3/src/zfac_par_m.F mumps-src/src/zfac_par_m.F
+--- MUMPS_5.7.3/src/zfac_par_m.F	2024-07-15 05:44:54.000000000 -0600
++++ mumps-src/src/zfac_par_m.F	2024-12-27 16:25:42.769148117 -0700
+@@ -41,7 +41,6 @@
+       USE ZMUMPS_FAC2_LDLT_M
+       USE ZMUMPS_FAC1_LU_M
+       USE ZMUMPS_FAC2_LU_M
+-      USE OMP_LIB
+       USE MUMPS_TPS_M
+       USE ZMUMPS_TPS_M
+       USE ZMUMPS_STRUC_DEF, ONLY : ZMUMPS_ROOT_STRUC
+diff -ru MUMPS_5.7.3/src/zsol_omp_m.F mumps-src/src/zsol_omp_m.F
+--- MUMPS_5.7.3/src/zsol_omp_m.F	2024-07-15 05:44:53.000000000 -0600
++++ mumps-src/src/zsol_omp_m.F	2024-12-27 16:26:55.204198290 -0700
+@@ -299,7 +299,7 @@
+      &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
+      &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
+       USE ZMUMPS_STRUC_DEF, ONLY : ZMUMPS_L0OMPFAC_T
+-      USE OMP_LIB
++!$    USE OMP_LIB
+       IMPLICIT NONE
+       INTEGER, INTENT( in ) :: N, MTYPE, NRHS, SLAVEF, LIW
+       INTEGER, INTENT( in ) :: IW(LIW)

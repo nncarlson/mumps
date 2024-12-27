@@ -120,7 +120,8 @@ set(url "https://mumps-solver.org/MUMPS_${MUMPS_UPSTREAM_VERSION}.tar.gz")
 
 set(FETCHCONTENT_QUIET no)
 
-FetchContent_Populate(${PROJECT_NAME} URL ${url})
+FetchContent_Populate(${PROJECT_NAME} URL ${url}
+	PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/mumps-nag.patch)
 
 # --- MUMPS build
 

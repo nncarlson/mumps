@@ -119,6 +119,7 @@ add_library(mumps_common_C OBJECT ${COMM_OTHER_C})
 add_library(mumps_common_Fortran OBJECT ${COMM_SRC_Fortran} ${COMM_OTHER_Fortran})
 
 add_library(mumps_common $<TARGET_OBJECTS:mumps_common_Fortran> $<TARGET_OBJECTS:mumps_common_C>)
+set_target_properties(mumps_common PROPERTIES LINKER_LANGUAGE C)
 
 set(BLAS_HAVE_GEMMT FALSE)
 if(BLAS_HAVE_sGEMMT OR BLAS_HAVE_dGEMMT OR BLAS_HAVE_cGEMMT OR BLAS_HAVE_zGEMMT)
@@ -226,6 +227,7 @@ add_library(${a}mumps_C OBJECT ${CINT_SRC} ${SRC_C})
 add_library(${a}mumps_Fortran OBJECT ${SRC_Fortran})
 
 add_library(${a}mumps $<TARGET_OBJECTS:${a}mumps_C> $<TARGET_OBJECTS:${a}mumps_Fortran>)
+set_target_properties(${a}mumps PROPERTIES LINKER_LANGUAGE C)
 
 foreach(t IN ITEMS ${a}mumps ${a}mumps_C ${a}mumps_Fortran)
 

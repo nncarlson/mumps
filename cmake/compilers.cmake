@@ -20,6 +20,7 @@ add_compile_options(
 "$<$<COMPILE_LANG_AND_ID:Fortran,GNU>:-fimplicit-none>"
 "$<$<COMPILE_LANG_AND_ID:Fortran,GNU>:-fno-strict-aliasing>"
 "$<$<AND:$<COMPILE_LANG_AND_ID:Fortran,GNU>,$<VERSION_GREATER_EQUAL:${CMAKE_Fortran_COMPILER_VERSION},10>>:-fallow-argument-mismatch;-fallow-invalid-boz>"
+"$<$<COMPILE_LANG_AND_ID:Fortran,NAG>:-u;-kind=byte;-dusty>"
 )
 # IntelLLVM does not have -fno-strict-aliasing for Fortran
 
