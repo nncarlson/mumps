@@ -1,5 +1,5 @@
 program test_mumps
-use, intrinsic:: iso_fortran_env, only: output_unit, stderr=>error_unit, int32
+use, intrinsic:: iso_fortran_env, only: output_unit, stderr=>error_unit, int32, int64, real64
 
 implicit none
 

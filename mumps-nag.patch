@@ -1,7 +1,490 @@
-Only in mumps-src/include: mumps_int_def.h
-diff -ru MUMPS_5.7.3/src/cfac_b.F mumps-src/src/cfac_b.F
+diff -ruN MUMPS_5.7.3/include/cmumps_root.h mumps-src/include/cmumps_root.h
+--- MUMPS_5.7.3/include/cmumps_root.h	2024-07-15 05:44:47.000000000 -0600
++++ mumps-src/include/cmumps_root.h	2024-12-28 14:56:07.918885546 -0700
+@@ -51,5 +51,5 @@
+       TYPE CMUMPS_L0OMPFAC_T
+          SEQUENCE
+          COMPLEX, POINTER, DIMENSION(:) :: A
+-         INTEGER(8) :: LA
++         INTEGER(INT64) :: LA
+       END TYPE CMUMPS_L0OMPFAC_T
+diff -ruN MUMPS_5.7.3/include/cmumps_struc.h mumps-src/include/cmumps_struc.h
+--- MUMPS_5.7.3/include/cmumps_struc.h	2024-07-15 05:44:47.000000000 -0600
++++ mumps-src/include/cmumps_struc.h	2024-12-28 11:46:44.076060851 -0700
+@@ -43,7 +43,7 @@
+ !    Assembled input matrix : User interface
+ !    ----------------------------------------
+         INTEGER    :: NZ  ! Standard integer input + bwd. compat.
+-        INTEGER(8) :: NNZ ! 64-bit integer input
++        INTEGER(INT64) :: NNZ ! 64-bit integer input
+         COMPLEX, DIMENSION(:), POINTER :: A
+         INTEGER, DIMENSION(:), POINTER :: IRN, JCN
+ !    --------------
+@@ -61,7 +61,7 @@
+ !       ------------------------------------
+         INTEGER    :: NZ_loc  ! Standard integer input + bwd. compat.
+         INTEGER    :: pad1
+-        INTEGER(8) :: NNZ_loc ! 64-bit integer input
++        INTEGER(INT64) :: NNZ_loc ! 64-bit integer input
+         INTEGER, DIMENSION(:), POINTER :: IRN_loc, JCN_loc
+         COMPLEX, DIMENSION(:), POINTER :: A_loc, pad2
+ !
+@@ -163,7 +163,7 @@
+ ! **********************
+ ! INTERNAL Working data
+ ! *********************
+-        INTEGER(8) :: KEEP8(150), MAX_SURF_MASTER
++        INTEGER(INT64) :: KEEP8(150), MAX_SURF_MASTER
+         INTEGER ::  INST_Number
+ !       For MPI
+         INTEGER ::  COMM_NODES, MYID_NODES, COMM_LOAD
+@@ -179,7 +179,7 @@
+         INTEGER,POINTER,DIMENSION(:) :: STEP, NE_STEPS, ND_STEPS
+         INTEGER,POINTER,DIMENSION(:) :: FRERE_STEPS, DAD_STEPS
+         INTEGER,POINTER,DIMENSION(:) :: FILS, FRTPTR, FRTELT
+-        INTEGER(8),POINTER,DIMENSION(:) :: PTRAR, PTR8ARR
++        INTEGER(INT64),POINTER,DIMENSION(:) :: PTRAR, PTR8ARR
+         INTEGER,POINTER,DIMENSION(:) :: NINCOLARR,NINROWARR,PTRDEBARR
+         INTEGER,POINTER,DIMENSION(:) :: NA, PROCNODE_STEPS
+ !       Info for pruning tree 
+@@ -187,7 +187,7 @@
+ !       PTLUST_S and PTRFAC are two pointer arrays computed during
+ !       factorization and used by the solve
+         INTEGER, DIMENSION(:), POINTER :: PTLUST_S
+-        INTEGER(8), DIMENSION(:), POINTER :: PTRFAC
++        INTEGER(INT64), DIMENSION(:), POINTER :: PTRFAC
+ !       main real working arrays for factorization/solve phases
+         COMPLEX, DIMENSION(:), POINTER :: S
+ !       Information on mapping
+@@ -236,8 +236,8 @@
+ !    OOC management data that must persist from factorization to solve.
+         INTEGER ::  OOC_MAX_NB_NODES_FOR_ZONE
+         INTEGER, DIMENSION(:,:),   POINTER :: OOC_INODE_SEQUENCE
+-        INTEGER(8),DIMENSION(:,:), POINTER :: OOC_SIZE_OF_BLOCK
+-        INTEGER(8), DIMENSION(:,:),   POINTER :: OOC_VADDR
++        INTEGER(INT64),DIMENSION(:,:), POINTER :: OOC_SIZE_OF_BLOCK
++        INTEGER(INT64), DIMENSION(:,:),   POINTER :: OOC_VADDR
+         INTEGER,DIMENSION(:), POINTER :: OOC_TOTAL_NB_NODES
+         INTEGER,DIMENSION(:), POINTER :: OOC_NB_FILES
+         INTEGER :: OOC_NB_FILE_TYPE,pad12
+@@ -264,10 +264,10 @@
+         INTEGER :: L_PHYS_L0_OMP
+         INTEGER :: L_VIRT_L0_OMP                                    
+         INTEGER :: LL0_OMP_MAPPING, LL0_OMP_FACTORS
+-        INTEGER(8) :: THREAD_LA
++        INTEGER(INT64) :: THREAD_LA
+ ! Estimates before L0_OMP
+         INTEGER, DIMENSION(:,:), POINTER    :: I4_L0_OMP
+-        INTEGER(8), DIMENSION(:,:), POINTER :: I8_L0_OMP
++        INTEGER(INT64), DIMENSION(:,:), POINTER :: I8_L0_OMP
+ ! Pool before L0_OMP
+         INTEGER, DIMENSION(:), POINTER :: IPOOL_B_L0_OMP
+ ! Pool after L0_OMP
+diff -ruN MUMPS_5.7.3/include/dmumps_root.h mumps-src/include/dmumps_root.h
+--- MUMPS_5.7.3/include/dmumps_root.h	2024-07-15 05:44:47.000000000 -0600
++++ mumps-src/include/dmumps_root.h	2024-12-28 14:56:20.395406075 -0700
+@@ -28,28 +28,28 @@
+         INTEGER, DIMENSION(:), POINTER :: RG2L
+         INTEGER, DIMENSION(:), POINTER :: IPIV
+ !       Centralized master of root
+-        DOUBLE PRECISION, DIMENSION(:), POINTER :: RHS_CNTR_MASTER_ROOT
++        REAL(REAL64), DIMENSION(:), POINTER :: RHS_CNTR_MASTER_ROOT
+ !       Used to access Schur easily from root structure
+-        DOUBLE PRECISION, DIMENSION(:), POINTER :: SCHUR_POINTER
++        REAL(REAL64), DIMENSION(:), POINTER :: SCHUR_POINTER
+ !       for try_null_space preprocessing constant only:
+-        DOUBLE PRECISION, DIMENSION(:), POINTER :: QR_TAU, rootpad1
++        REAL(REAL64), DIMENSION(:), POINTER :: QR_TAU, rootpad1
+ !       Fwd in facto: 
+ !           case of scalapack root: to store RHS in 2D block cyclic
+ !           format compatible with root distribution
+-        DOUBLE PRECISION, DIMENSION(:,:), POINTER :: RHS_ROOT, rootpad2
++        REAL(REAL64), DIMENSION(:,:), POINTER :: RHS_ROOT, rootpad2
+ !       for try_nullspace preprocessing constant only:
+-        DOUBLE PRECISION :: QR_RCOND, rootpad3
++        REAL(REAL64) :: QR_RCOND, rootpad3
+         LOGICAL :: yes, gridinit_done
+ !       for SVD on root (#define try_null_space)
+-        DOUBLE PRECISION, DIMENSION(:,:), POINTER :: SVD_U, SVD_VT
++        REAL(REAL64), DIMENSION(:,:), POINTER :: SVD_U, SVD_VT
+ !       for RR on root (#define try_null_space)
+-        DOUBLE PRECISION, DIMENSION(:), POINTER :: SINGULAR_VALUES
++        REAL(REAL64), DIMENSION(:), POINTER :: SINGULAR_VALUES
+         INTEGER :: NB_SINGULAR_VALUES,rootpad4
+ !
+       END TYPE DMUMPS_ROOT_STRUC
+ !     multicore
+       TYPE DMUMPS_L0OMPFAC_T
+          SEQUENCE
+-         DOUBLE PRECISION, POINTER, DIMENSION(:) :: A
+-         INTEGER(8) :: LA
++         REAL(REAL64), POINTER, DIMENSION(:) :: A
++         INTEGER(INT64) :: LA
+       END TYPE DMUMPS_L0OMPFAC_T
+diff -ruN MUMPS_5.7.3/include/dmumps_struc.h mumps-src/include/dmumps_struc.h
+--- MUMPS_5.7.3/include/dmumps_struc.h	2024-07-15 05:44:47.000000000 -0600
++++ mumps-src/include/dmumps_struc.h	2024-12-28 11:46:44.076060851 -0700
+@@ -43,7 +43,7 @@
+ !    Assembled input matrix : User interface
+ !    ----------------------------------------
+         INTEGER    :: NZ  ! Standard integer input + bwd. compat.
+-        INTEGER(8) :: NNZ ! 64-bit integer input
++        INTEGER(INT64) :: NNZ ! 64-bit integer input
+         DOUBLE PRECISION, DIMENSION(:), POINTER :: A
+         INTEGER, DIMENSION(:), POINTER :: IRN, JCN
+ !    --------------
+@@ -61,7 +61,7 @@
+ !       ------------------------------------
+         INTEGER    :: NZ_loc  ! Standard integer input + bwd. compat.
+         INTEGER    :: pad1
+-        INTEGER(8) :: NNZ_loc ! 64-bit integer input
++        INTEGER(INT64) :: NNZ_loc ! 64-bit integer input
+         INTEGER, DIMENSION(:), POINTER :: IRN_loc, JCN_loc
+         DOUBLE PRECISION, DIMENSION(:), POINTER :: A_loc, pad2
+ !
+@@ -163,7 +163,7 @@
+ ! **********************
+ ! INTERNAL Working data
+ ! *********************
+-        INTEGER(8) :: KEEP8(150), MAX_SURF_MASTER
++        INTEGER(INT64) :: KEEP8(150), MAX_SURF_MASTER
+         INTEGER ::  INST_Number
+ !       For MPI
+         INTEGER ::  COMM_NODES, MYID_NODES, COMM_LOAD
+@@ -179,7 +179,7 @@
+         INTEGER,POINTER,DIMENSION(:) :: STEP, NE_STEPS, ND_STEPS
+         INTEGER,POINTER,DIMENSION(:) :: FRERE_STEPS, DAD_STEPS
+         INTEGER,POINTER,DIMENSION(:) :: FILS, FRTPTR, FRTELT
+-        INTEGER(8),POINTER,DIMENSION(:) :: PTRAR, PTR8ARR
++        INTEGER(INT64),POINTER,DIMENSION(:) :: PTRAR, PTR8ARR
+         INTEGER,POINTER,DIMENSION(:) :: NINCOLARR,NINROWARR,PTRDEBARR
+         INTEGER,POINTER,DIMENSION(:) :: NA, PROCNODE_STEPS
+ !       Info for pruning tree 
+@@ -187,7 +187,7 @@
+ !       PTLUST_S and PTRFAC are two pointer arrays computed during
+ !       factorization and used by the solve
+         INTEGER, DIMENSION(:), POINTER :: PTLUST_S
+-        INTEGER(8), DIMENSION(:), POINTER :: PTRFAC
++        INTEGER(INT64), DIMENSION(:), POINTER :: PTRFAC
+ !       main real working arrays for factorization/solve phases
+         DOUBLE PRECISION, DIMENSION(:), POINTER :: S
+ !       Information on mapping
+@@ -236,8 +236,8 @@
+ !    OOC management data that must persist from factorization to solve.
+         INTEGER ::  OOC_MAX_NB_NODES_FOR_ZONE
+         INTEGER, DIMENSION(:,:),   POINTER :: OOC_INODE_SEQUENCE
+-        INTEGER(8),DIMENSION(:,:), POINTER :: OOC_SIZE_OF_BLOCK
+-        INTEGER(8), DIMENSION(:,:),   POINTER :: OOC_VADDR
++        INTEGER(INT64),DIMENSION(:,:), POINTER :: OOC_SIZE_OF_BLOCK
++        INTEGER(INT64), DIMENSION(:,:),   POINTER :: OOC_VADDR
+         INTEGER,DIMENSION(:), POINTER :: OOC_TOTAL_NB_NODES
+         INTEGER,DIMENSION(:), POINTER :: OOC_NB_FILES
+         INTEGER :: OOC_NB_FILE_TYPE,pad12
+@@ -264,10 +264,10 @@
+         INTEGER :: L_PHYS_L0_OMP
+         INTEGER :: L_VIRT_L0_OMP                                    
+         INTEGER :: LL0_OMP_MAPPING, LL0_OMP_FACTORS
+-        INTEGER(8) :: THREAD_LA
++        INTEGER(INT64) :: THREAD_LA
+ ! Estimates before L0_OMP
+         INTEGER, DIMENSION(:,:), POINTER    :: I4_L0_OMP
+-        INTEGER(8), DIMENSION(:,:), POINTER :: I8_L0_OMP
++        INTEGER(INT64), DIMENSION(:,:), POINTER :: I8_L0_OMP
+ ! Pool before L0_OMP
+         INTEGER, DIMENSION(:), POINTER :: IPOOL_B_L0_OMP
+ ! Pool after L0_OMP
+diff -ruN MUMPS_5.7.3/include/mumps_int_def.h mumps-src/include/mumps_int_def.h
+--- MUMPS_5.7.3/include/mumps_int_def.h	1969-12-31 17:00:00.000000000 -0700
++++ mumps-src/include/mumps_int_def.h	2024-12-28 11:46:44.136063350 -0700
+@@ -0,0 +1,23 @@
++/*
++ *
++ *  This file is part of MUMPS 5.7.3, released
++ *  on Mon Jul 15 11:44:21 UTC 2024
++ *
++ *
++ *  Copyright 1991-2024 CERFACS, CNRS, ENS Lyon, INP Toulouse, Inria,
++ *  Mumps Technologies, University of Bordeaux.
++ *
++ *  This version of MUMPS is provided to you free of charge. It is
++ *  released under the CeCILL-C license 
++ *  (see doc/CeCILL-C_V1-en.txt, doc/CeCILL-C_V1-fr.txt, and
++ *  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
++ *
++ */
++#if ! defined(MUMPS_INT_H)
++#   define MUMPS_INT_H
++/*  MUMPS has been configured without -DINTSIZE64:
++ *  both 32-bit and 64-bit integers are used, depending on usage
++ *  (e.g., the order of a matrix, N, is a 32-bit integer, and the
++ *  number of nonzeros, NNZ, is a 64-bit integers) */
++#   define MUMPS_INTSIZE32
++#endif
+diff -ruN MUMPS_5.7.3/include/smumps_root.h mumps-src/include/smumps_root.h
+--- MUMPS_5.7.3/include/smumps_root.h	2024-07-15 05:44:47.000000000 -0600
++++ mumps-src/include/smumps_root.h	2024-12-28 14:56:30.691835653 -0700
+@@ -51,5 +51,5 @@
+       TYPE SMUMPS_L0OMPFAC_T
+          SEQUENCE
+          REAL, POINTER, DIMENSION(:) :: A
+-         INTEGER(8) :: LA
++         INTEGER(INT64) :: LA
+       END TYPE SMUMPS_L0OMPFAC_T
+diff -ruN MUMPS_5.7.3/include/smumps_struc.h mumps-src/include/smumps_struc.h
+--- MUMPS_5.7.3/include/smumps_struc.h	2024-07-15 05:44:47.000000000 -0600
++++ mumps-src/include/smumps_struc.h	2024-12-28 11:46:44.076060851 -0700
+@@ -43,7 +43,7 @@
+ !    Assembled input matrix : User interface
+ !    ----------------------------------------
+         INTEGER    :: NZ  ! Standard integer input + bwd. compat.
+-        INTEGER(8) :: NNZ ! 64-bit integer input
++        INTEGER(INT64) :: NNZ ! 64-bit integer input
+         REAL, DIMENSION(:), POINTER :: A
+         INTEGER, DIMENSION(:), POINTER :: IRN, JCN
+ !    --------------
+@@ -61,7 +61,7 @@
+ !       ------------------------------------
+         INTEGER    :: NZ_loc  ! Standard integer input + bwd. compat.
+         INTEGER    :: pad1
+-        INTEGER(8) :: NNZ_loc ! 64-bit integer input
++        INTEGER(INT64) :: NNZ_loc ! 64-bit integer input
+         INTEGER, DIMENSION(:), POINTER :: IRN_loc, JCN_loc
+         REAL, DIMENSION(:), POINTER :: A_loc, pad2
+ !
+@@ -163,7 +163,7 @@
+ ! **********************
+ ! INTERNAL Working data
+ ! *********************
+-        INTEGER(8) :: KEEP8(150), MAX_SURF_MASTER
++        INTEGER(INT64) :: KEEP8(150), MAX_SURF_MASTER
+         INTEGER ::  INST_Number
+ !       For MPI
+         INTEGER ::  COMM_NODES, MYID_NODES, COMM_LOAD
+@@ -179,7 +179,7 @@
+         INTEGER,POINTER,DIMENSION(:) :: STEP, NE_STEPS, ND_STEPS
+         INTEGER,POINTER,DIMENSION(:) :: FRERE_STEPS, DAD_STEPS
+         INTEGER,POINTER,DIMENSION(:) :: FILS, FRTPTR, FRTELT
+-        INTEGER(8),POINTER,DIMENSION(:) :: PTRAR, PTR8ARR
++        INTEGER(INT64),POINTER,DIMENSION(:) :: PTRAR, PTR8ARR
+         INTEGER,POINTER,DIMENSION(:) :: NINCOLARR,NINROWARR,PTRDEBARR
+         INTEGER,POINTER,DIMENSION(:) :: NA, PROCNODE_STEPS
+ !       Info for pruning tree 
+@@ -187,7 +187,7 @@
+ !       PTLUST_S and PTRFAC are two pointer arrays computed during
+ !       factorization and used by the solve
+         INTEGER, DIMENSION(:), POINTER :: PTLUST_S
+-        INTEGER(8), DIMENSION(:), POINTER :: PTRFAC
++        INTEGER(INT64), DIMENSION(:), POINTER :: PTRFAC
+ !       main real working arrays for factorization/solve phases
+         REAL, DIMENSION(:), POINTER :: S
+ !       Information on mapping
+@@ -236,8 +236,8 @@
+ !    OOC management data that must persist from factorization to solve.
+         INTEGER ::  OOC_MAX_NB_NODES_FOR_ZONE
+         INTEGER, DIMENSION(:,:),   POINTER :: OOC_INODE_SEQUENCE
+-        INTEGER(8),DIMENSION(:,:), POINTER :: OOC_SIZE_OF_BLOCK
+-        INTEGER(8), DIMENSION(:,:),   POINTER :: OOC_VADDR
++        INTEGER(INT64),DIMENSION(:,:), POINTER :: OOC_SIZE_OF_BLOCK
++        INTEGER(INT64), DIMENSION(:,:),   POINTER :: OOC_VADDR
+         INTEGER,DIMENSION(:), POINTER :: OOC_TOTAL_NB_NODES
+         INTEGER,DIMENSION(:), POINTER :: OOC_NB_FILES
+         INTEGER :: OOC_NB_FILE_TYPE,pad12
+@@ -264,10 +264,10 @@
+         INTEGER :: L_PHYS_L0_OMP
+         INTEGER :: L_VIRT_L0_OMP                                    
+         INTEGER :: LL0_OMP_MAPPING, LL0_OMP_FACTORS
+-        INTEGER(8) :: THREAD_LA
++        INTEGER(INT64) :: THREAD_LA
+ ! Estimates before L0_OMP
+         INTEGER, DIMENSION(:,:), POINTER    :: I4_L0_OMP
+-        INTEGER(8), DIMENSION(:,:), POINTER :: I8_L0_OMP
++        INTEGER(INT64), DIMENSION(:,:), POINTER :: I8_L0_OMP
+ ! Pool before L0_OMP
+         INTEGER, DIMENSION(:), POINTER :: IPOOL_B_L0_OMP
+ ! Pool after L0_OMP
+diff -ruN MUMPS_5.7.3/include/zmumps_root.h mumps-src/include/zmumps_root.h
+--- MUMPS_5.7.3/include/zmumps_root.h	2024-07-15 05:44:47.000000000 -0600
++++ mumps-src/include/zmumps_root.h	2024-12-28 14:56:39.559205595 -0700
+@@ -28,20 +28,20 @@
+         INTEGER, DIMENSION(:), POINTER :: RG2L
+         INTEGER, DIMENSION(:), POINTER :: IPIV
+ !       Centralized master of root
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: RHS_CNTR_MASTER_ROOT
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: RHS_CNTR_MASTER_ROOT
+ !       Used to access Schur easily from root structure
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: SCHUR_POINTER
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: SCHUR_POINTER
+ !       for try_null_space preprocessing constant only:
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: QR_TAU, rootpad1
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: QR_TAU, rootpad1
+ !       Fwd in facto: 
+ !           case of scalapack root: to store RHS in 2D block cyclic
+ !           format compatible with root distribution
+-        COMPLEX(kind=8), DIMENSION(:,:), POINTER :: RHS_ROOT, rootpad2
++        COMPLEX(REAL64), DIMENSION(:,:), POINTER :: RHS_ROOT, rootpad2
+ !       for try_nullspace preprocessing constant only:
+         DOUBLE PRECISION :: QR_RCOND, rootpad3
+         LOGICAL :: yes, gridinit_done
+ !       for SVD on root (#define try_null_space)
+-        COMPLEX(kind=8), DIMENSION(:,:), POINTER :: SVD_U, SVD_VT
++        COMPLEX(REAL64), DIMENSION(:,:), POINTER :: SVD_U, SVD_VT
+ !       for RR on root (#define try_null_space)
+         DOUBLE PRECISION, DIMENSION(:), POINTER :: SINGULAR_VALUES
+         INTEGER :: NB_SINGULAR_VALUES,rootpad4
+@@ -50,6 +50,6 @@
+ !     multicore
+       TYPE ZMUMPS_L0OMPFAC_T
+          SEQUENCE
+-         COMPLEX(kind=8), POINTER, DIMENSION(:) :: A
+-         INTEGER(8) :: LA
++         COMPLEX(REAL64), POINTER, DIMENSION(:) :: A
++         INTEGER(INT64) :: LA
+       END TYPE ZMUMPS_L0OMPFAC_T
+diff -ruN MUMPS_5.7.3/include/zmumps_struc.h mumps-src/include/zmumps_struc.h
+--- MUMPS_5.7.3/include/zmumps_struc.h	2024-07-15 05:44:47.000000000 -0600
++++ mumps-src/include/zmumps_struc.h	2024-12-28 11:46:44.077060894 -0700
+@@ -43,8 +43,8 @@
+ !    Assembled input matrix : User interface
+ !    ----------------------------------------
+         INTEGER    :: NZ  ! Standard integer input + bwd. compat.
+-        INTEGER(8) :: NNZ ! 64-bit integer input
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: A
++        INTEGER(INT64) :: NNZ ! 64-bit integer input
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: A
+         INTEGER, DIMENSION(:), POINTER :: IRN, JCN
+ !    --------------
+ !    Scaling arrays
+@@ -53,7 +53,7 @@
+         DOUBLE PRECISION, DIMENSION(:), POINTER :: COLSCA_loc
+         DOUBLE PRECISION, DIMENSION(:), POINTER :: ROWSCA_loc
+         INTEGER, DIMENSION(:), POINTER :: ROWIND, COLIND
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: PIVOTS
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: PIVOTS
+ !
+ !       ------------------------------------
+ !       Case of distributed assembled matrix
+@@ -61,9 +61,9 @@
+ !       ------------------------------------
+         INTEGER    :: NZ_loc  ! Standard integer input + bwd. compat.
+         INTEGER    :: pad1
+-        INTEGER(8) :: NNZ_loc ! 64-bit integer input
++        INTEGER(INT64) :: NNZ_loc ! 64-bit integer input
+         INTEGER, DIMENSION(:), POINTER :: IRN_loc, JCN_loc
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: A_loc, pad2
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: A_loc, pad2
+ !
+ !    ----------------------------------------
+ !    Unassembled input matrix: User interface
+@@ -71,7 +71,7 @@
+         INTEGER :: NELT, pad3
+         INTEGER, DIMENSION(:), POINTER :: ELTPTR
+         INTEGER, DIMENSION(:), POINTER :: ELTVAR
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: A_ELT, pad4
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: A_ELT, pad4
+ !
+ !    ---------------------------------------------
+ !    Symmetric permutation : 
+@@ -94,10 +94,10 @@
+ !    -------------
+ !       right-hand side and solution
+ !    -------------------------------------------------------
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: RHS, REDRHS
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: RHS_SPARSE
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: SOL_loc
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: RHS_loc
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: RHS, REDRHS
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: RHS_SPARSE
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: SOL_loc
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: RHS_loc
+         INTEGER, DIMENSION(:), POINTER :: IRHS_SPARSE
+         INTEGER, DIMENSION(:), POINTER :: IRHS_PTR
+         INTEGER, DIMENSION(:), POINTER :: ISOL_loc
+@@ -131,8 +131,8 @@
+         INTEGER ::  NPROW, NPCOL, MBLOCK, NBLOCK
+         INTEGER ::  SCHUR_MLOC, SCHUR_NLOC, SCHUR_LLD
+         INTEGER ::  SIZE_SCHUR
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: SCHUR
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: SCHUR_CINTERFACE
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: SCHUR
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: SCHUR_CINTERFACE
+         INTEGER, DIMENSION(:), POINTER :: LISTVAR_SCHUR
+ !    -------------------------------------
+ !    Case of distributed matrix on entry:
+@@ -163,7 +163,7 @@
+ ! **********************
+ ! INTERNAL Working data
+ ! *********************
+-        INTEGER(8) :: KEEP8(150), MAX_SURF_MASTER
++        INTEGER(INT64) :: KEEP8(150), MAX_SURF_MASTER
+         INTEGER ::  INST_Number
+ !       For MPI
+         INTEGER ::  COMM_NODES, MYID_NODES, COMM_LOAD
+@@ -179,7 +179,7 @@
+         INTEGER,POINTER,DIMENSION(:) :: STEP, NE_STEPS, ND_STEPS
+         INTEGER,POINTER,DIMENSION(:) :: FRERE_STEPS, DAD_STEPS
+         INTEGER,POINTER,DIMENSION(:) :: FILS, FRTPTR, FRTELT
+-        INTEGER(8),POINTER,DIMENSION(:) :: PTRAR, PTR8ARR
++        INTEGER(INT64),POINTER,DIMENSION(:) :: PTRAR, PTR8ARR
+         INTEGER,POINTER,DIMENSION(:) :: NINCOLARR,NINROWARR,PTRDEBARR
+         INTEGER,POINTER,DIMENSION(:) :: NA, PROCNODE_STEPS
+ !       Info for pruning tree 
+@@ -187,9 +187,9 @@
+ !       PTLUST_S and PTRFAC are two pointer arrays computed during
+ !       factorization and used by the solve
+         INTEGER, DIMENSION(:), POINTER :: PTLUST_S
+-        INTEGER(8), DIMENSION(:), POINTER :: PTRFAC
++        INTEGER(INT64), DIMENSION(:), POINTER :: PTRFAC
+ !       main real working arrays for factorization/solve phases
+-        COMPLEX(kind=8), DIMENSION(:), POINTER :: S
++        COMPLEX(REAL64), DIMENSION(:), POINTER :: S
+ !       Information on mapping
+         INTEGER, DIMENSION(:), POINTER :: PROCNODE
+ !       Input matrix ready for numerical assembly 
+@@ -210,7 +210,7 @@
+         INTEGER, DIMENSION(:),   POINTER :: GLOB2LOC_RHS
+         LOGICAL  :: GLOB2LOC_SOL_ALLOC, pad11
+         INTEGER, DIMENSION(:),   POINTER :: GLOB2LOC_SOL
+-        COMPLEX(kind=8), DIMENSION(:),   POINTER :: RHSINTR
++        COMPLEX(REAL64), DIMENSION(:),   POINTER :: RHSINTR
+ !       Info on the subtrees to be used during factorization
+         DOUBLE PRECISION, DIMENSION(:), POINTER :: MEM_SUBTREE
+         DOUBLE PRECISION, DIMENSION(:), POINTER :: COST_TRAV
+@@ -224,7 +224,7 @@
+         INTEGER, DIMENSION(:),   POINTER :: SCHED_GRP
+         INTEGER, DIMENSION(:),   POINTER :: SCHED_SBTR
+         INTEGER, DIMENSION(:),   POINTER :: CROIX_MANU
+-        COMPLEX(kind=8), DIMENSION(:),   POINTER :: WK_USER
++        COMPLEX(REAL64), DIMENSION(:),   POINTER :: WK_USER
+         INTEGER :: NBSA_LOCAL
+         INTEGER :: LWK_USER
+ !    Internal control array
+@@ -236,8 +236,8 @@
+ !    OOC management data that must persist from factorization to solve.
+         INTEGER ::  OOC_MAX_NB_NODES_FOR_ZONE
+         INTEGER, DIMENSION(:,:),   POINTER :: OOC_INODE_SEQUENCE
+-        INTEGER(8),DIMENSION(:,:), POINTER :: OOC_SIZE_OF_BLOCK
+-        INTEGER(8), DIMENSION(:,:),   POINTER :: OOC_VADDR
++        INTEGER(INT64),DIMENSION(:,:), POINTER :: OOC_SIZE_OF_BLOCK
++        INTEGER(INT64), DIMENSION(:,:),   POINTER :: OOC_VADDR
+         INTEGER,DIMENSION(:), POINTER :: OOC_TOTAL_NB_NODES
+         INTEGER,DIMENSION(:), POINTER :: OOC_NB_FILES
+         INTEGER :: OOC_NB_FILE_TYPE,pad12
+@@ -264,10 +264,10 @@
+         INTEGER :: L_PHYS_L0_OMP
+         INTEGER :: L_VIRT_L0_OMP                                    
+         INTEGER :: LL0_OMP_MAPPING, LL0_OMP_FACTORS
+-        INTEGER(8) :: THREAD_LA
++        INTEGER(INT64) :: THREAD_LA
+ ! Estimates before L0_OMP
+         INTEGER, DIMENSION(:,:), POINTER    :: I4_L0_OMP
+-        INTEGER(8), DIMENSION(:,:), POINTER :: I8_L0_OMP
++        INTEGER(INT64), DIMENSION(:,:), POINTER :: I8_L0_OMP
+ ! Pool before L0_OMP
+         INTEGER, DIMENSION(:), POINTER :: IPOOL_B_L0_OMP
+ ! Pool after L0_OMP
+diff -ruN MUMPS_5.7.3/src/cfac_b.F mumps-src/src/cfac_b.F
 --- MUMPS_5.7.3/src/cfac_b.F	2024-07-15 05:44:52.000000000 -0600
-+++ mumps-src/src/cfac_b.F	2024-12-27 16:29:04.852657637 -0700
++++ mumps-src/src/cfac_b.F	2024-12-28 11:46:44.077060894 -0700
 @@ -32,7 +32,7 @@
        USE CMUMPS_BUF, ONLY : CMUMPS_BUF_ALLOC_CB, CMUMPS_BUF_DEALL_CB
        USE CMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
@@ -20,9 +503,9 @@ diff -ru MUMPS_5.7.3/src/cfac_b.F mumps-src/src/cfac_b.F
        USE MUMPS_TPS_M
        USE CMUMPS_TPS_M
        USE CMUMPS_STRUC_DEF, ONLY : CMUMPS_ROOT_STRUC
-diff -ru MUMPS_5.7.3/src/cfac_par_m.F mumps-src/src/cfac_par_m.F
+diff -ruN MUMPS_5.7.3/src/cfac_par_m.F mumps-src/src/cfac_par_m.F
 --- MUMPS_5.7.3/src/cfac_par_m.F	2024-07-15 05:44:52.000000000 -0600
-+++ mumps-src/src/cfac_par_m.F	2024-12-27 16:30:31.309298222 -0700
++++ mumps-src/src/cfac_par_m.F	2024-12-28 11:46:44.077060894 -0700
 @@ -41,7 +41,6 @@
        USE CMUMPS_FAC2_LDLT_M
        USE CMUMPS_FAC1_LU_M
@@ -31,9 +514,19 @@ diff -ru MUMPS_5.7.3/src/cfac_par_m.F mumps-src/src/cfac_par_m.F
        USE MUMPS_TPS_M
        USE CMUMPS_TPS_M
        USE CMUMPS_STRUC_DEF, ONLY : CMUMPS_ROOT_STRUC
-diff -ru MUMPS_5.7.3/src/csol_omp_m.F mumps-src/src/csol_omp_m.F
+diff -ruN MUMPS_5.7.3/src/cmumps_struc_def.F mumps-src/src/cmumps_struc_def.F
+--- MUMPS_5.7.3/src/cmumps_struc_def.F	2024-07-15 05:44:51.000000000 -0600
++++ mumps-src/src/cmumps_struc_def.F	2024-12-28 14:51:12.530561948 -0700
+@@ -12,5 +12,6 @@
+ C  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
+ C
+        MODULE CMUMPS_STRUC_DEF
++       USE,INTRINSIC :: ISO_FORTRAN_ENV, ONLY: INT64
+        INCLUDE 'cmumps_struc.h'
+        END MODULE CMUMPS_STRUC_DEF
+diff -ruN MUMPS_5.7.3/src/csol_omp_m.F mumps-src/src/csol_omp_m.F
 --- MUMPS_5.7.3/src/csol_omp_m.F	2024-07-15 05:44:51.000000000 -0600
-+++ mumps-src/src/csol_omp_m.F	2024-12-27 16:28:40.866647624 -0700
++++ mumps-src/src/csol_omp_m.F	2024-12-28 11:46:44.078060935 -0700
 @@ -299,7 +299,7 @@
       &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
       &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
@@ -43,9 +536,9 @@ diff -ru MUMPS_5.7.3/src/csol_omp_m.F mumps-src/src/csol_omp_m.F
        IMPLICIT NONE
        INTEGER, INTENT( in ) :: N, MTYPE, NRHS, SLAVEF, LIW
        INTEGER, INTENT( in ) :: IW(LIW)
-diff -ru MUMPS_5.7.3/src/dfac_b.F mumps-src/src/dfac_b.F
+diff -ruN MUMPS_5.7.3/src/dfac_b.F mumps-src/src/dfac_b.F
 --- MUMPS_5.7.3/src/dfac_b.F	2024-07-15 05:44:50.000000000 -0600
-+++ mumps-src/src/dfac_b.F	2024-12-27 16:24:35.790327702 -0700
++++ mumps-src/src/dfac_b.F	2024-12-28 11:46:44.078060935 -0700
 @@ -32,7 +32,7 @@
        USE DMUMPS_BUF, ONLY : DMUMPS_BUF_ALLOC_CB, DMUMPS_BUF_DEALL_CB
        USE DMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
@@ -64,9 +557,9 @@ diff -ru MUMPS_5.7.3/src/dfac_b.F mumps-src/src/dfac_b.F
        USE MUMPS_TPS_M
        USE DMUMPS_TPS_M
        USE DMUMPS_STRUC_DEF, ONLY : DMUMPS_ROOT_STRUC
-diff -ru MUMPS_5.7.3/src/dfac_par_m.F mumps-src/src/dfac_par_m.F
+diff -ruN MUMPS_5.7.3/src/dfac_par_m.F mumps-src/src/dfac_par_m.F
 --- MUMPS_5.7.3/src/dfac_par_m.F	2024-07-15 05:44:50.000000000 -0600
-+++ mumps-src/src/dfac_par_m.F	2024-12-27 16:24:35.791327744 -0700
++++ mumps-src/src/dfac_par_m.F	2024-12-28 11:46:44.078060935 -0700
 @@ -41,7 +41,6 @@
        USE DMUMPS_FAC2_LDLT_M
        USE DMUMPS_FAC1_LU_M
@@ -75,9 +568,19 @@ diff -ru MUMPS_5.7.3/src/dfac_par_m.F mumps-src/src/dfac_par_m.F
        USE MUMPS_TPS_M
        USE DMUMPS_TPS_M
        USE DMUMPS_STRUC_DEF, ONLY : DMUMPS_ROOT_STRUC
-diff -ru MUMPS_5.7.3/src/dsol_omp_m.F mumps-src/src/dsol_omp_m.F
+diff -ruN MUMPS_5.7.3/src/dmumps_struc_def.F mumps-src/src/dmumps_struc_def.F
+--- MUMPS_5.7.3/src/dmumps_struc_def.F	2024-07-15 05:44:49.000000000 -0600
++++ mumps-src/src/dmumps_struc_def.F	2024-12-28 14:49:50.597143672 -0700
+@@ -12,5 +12,6 @@
+ C  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
+ C
+        MODULE DMUMPS_STRUC_DEF
++       USE,INTRINSIC :: ISO_FORTRAN_ENV, only: INT64, REAL64
+        INCLUDE 'dmumps_struc.h'
+        END MODULE DMUMPS_STRUC_DEF
+diff -ruN MUMPS_5.7.3/src/dsol_omp_m.F mumps-src/src/dsol_omp_m.F
 --- MUMPS_5.7.3/src/dsol_omp_m.F	2024-07-15 05:44:49.000000000 -0600
-+++ mumps-src/src/dsol_omp_m.F	2024-12-27 16:24:35.791327744 -0700
++++ mumps-src/src/dsol_omp_m.F	2024-12-28 11:46:44.078060935 -0700
 @@ -299,7 +299,7 @@
       &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
       &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
@@ -87,9 +590,9 @@ diff -ru MUMPS_5.7.3/src/dsol_omp_m.F mumps-src/src/dsol_omp_m.F
        IMPLICIT NONE
        INTEGER, INTENT( in ) :: N, MTYPE, NRHS, SLAVEF, LIW
        INTEGER, INTENT( in ) :: IW(LIW)
-diff -ru MUMPS_5.7.3/src/sfac_b.F mumps-src/src/sfac_b.F
+diff -ruN MUMPS_5.7.3/src/sfac_b.F mumps-src/src/sfac_b.F
 --- MUMPS_5.7.3/src/sfac_b.F	2024-07-15 05:44:48.000000000 -0600
-+++ mumps-src/src/sfac_b.F	2024-12-27 16:29:57.461872950 -0700
++++ mumps-src/src/sfac_b.F	2024-12-28 11:46:44.079060977 -0700
 @@ -32,7 +32,7 @@
        USE SMUMPS_BUF, ONLY : SMUMPS_BUF_ALLOC_CB, SMUMPS_BUF_DEALL_CB
        USE SMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
@@ -108,9 +611,9 @@ diff -ru MUMPS_5.7.3/src/sfac_b.F mumps-src/src/sfac_b.F
        USE MUMPS_TPS_M
        USE SMUMPS_TPS_M
        USE SMUMPS_STRUC_DEF, ONLY : SMUMPS_ROOT_STRUC
-diff -ru MUMPS_5.7.3/src/sfac_par_m.F mumps-src/src/sfac_par_m.F
+diff -ruN MUMPS_5.7.3/src/sfac_par_m.F mumps-src/src/sfac_par_m.F
 --- MUMPS_5.7.3/src/sfac_par_m.F	2024-07-15 05:44:48.000000000 -0600
-+++ mumps-src/src/sfac_par_m.F	2024-12-27 16:30:40.647691449 -0700
++++ mumps-src/src/sfac_par_m.F	2024-12-28 11:46:44.079060977 -0700
 @@ -41,7 +41,6 @@
        USE SMUMPS_FAC2_LDLT_M
        USE SMUMPS_FAC1_LU_M
@@ -119,9 +622,19 @@ diff -ru MUMPS_5.7.3/src/sfac_par_m.F mumps-src/src/sfac_par_m.F
        USE MUMPS_TPS_M
        USE SMUMPS_TPS_M
        USE SMUMPS_STRUC_DEF, ONLY : SMUMPS_ROOT_STRUC
-diff -ru MUMPS_5.7.3/src/ssol_omp_m.F mumps-src/src/ssol_omp_m.F
+diff -ruN MUMPS_5.7.3/src/smumps_struc_def.F mumps-src/src/smumps_struc_def.F
+--- MUMPS_5.7.3/src/smumps_struc_def.F	2024-07-15 05:44:47.000000000 -0600
++++ mumps-src/src/smumps_struc_def.F	2024-12-28 14:50:36.088041561 -0700
+@@ -12,5 +12,6 @@
+ C  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
+ C
+        MODULE SMUMPS_STRUC_DEF
++       USE,INTRINSIC :: ISO_FORTRAN_ENV, only: INT64
+        INCLUDE 'smumps_struc.h'
+        END MODULE SMUMPS_STRUC_DEF
+diff -ruN MUMPS_5.7.3/src/ssol_omp_m.F mumps-src/src/ssol_omp_m.F
 --- MUMPS_5.7.3/src/ssol_omp_m.F	2024-07-15 05:44:48.000000000 -0600
-+++ mumps-src/src/ssol_omp_m.F	2024-12-27 16:29:31.204767293 -0700
++++ mumps-src/src/ssol_omp_m.F	2024-12-28 11:46:44.079060977 -0700
 @@ -299,7 +299,7 @@
       &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
       &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
@@ -131,9 +644,9 @@ diff -ru MUMPS_5.7.3/src/ssol_omp_m.F mumps-src/src/ssol_omp_m.F
        IMPLICIT NONE
        INTEGER, INTENT( in ) :: N, MTYPE, NRHS, SLAVEF, LIW
        INTEGER, INTENT( in ) :: IW(LIW)
-diff -ru MUMPS_5.7.3/src/zfac_b.F mumps-src/src/zfac_b.F
+diff -ruN MUMPS_5.7.3/src/zfac_b.F mumps-src/src/zfac_b.F
 --- MUMPS_5.7.3/src/zfac_b.F	2024-07-15 05:44:53.000000000 -0600
-+++ mumps-src/src/zfac_b.F	2024-12-27 16:27:54.706703875 -0700
++++ mumps-src/src/zfac_b.F	2024-12-28 11:46:44.079060977 -0700
 @@ -32,7 +32,7 @@
        USE ZMUMPS_BUF, ONLY : ZMUMPS_BUF_ALLOC_CB, ZMUMPS_BUF_DEALL_CB
        USE ZMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
@@ -152,9 +665,9 @@ diff -ru MUMPS_5.7.3/src/zfac_b.F mumps-src/src/zfac_b.F
        USE MUMPS_TPS_M
        USE ZMUMPS_TPS_M
        USE ZMUMPS_STRUC_DEF, ONLY : ZMUMPS_ROOT_STRUC
-diff -ru MUMPS_5.7.3/src/zfac_par_m.F mumps-src/src/zfac_par_m.F
+diff -ruN MUMPS_5.7.3/src/zfac_par_m.F mumps-src/src/zfac_par_m.F
 --- MUMPS_5.7.3/src/zfac_par_m.F	2024-07-15 05:44:54.000000000 -0600
-+++ mumps-src/src/zfac_par_m.F	2024-12-27 16:25:42.769148117 -0700
++++ mumps-src/src/zfac_par_m.F	2024-12-28 11:46:44.080061018 -0700
 @@ -41,7 +41,6 @@
        USE ZMUMPS_FAC2_LDLT_M
        USE ZMUMPS_FAC1_LU_M
@@ -163,9 +676,19 @@ diff -ru MUMPS_5.7.3/src/zfac_par_m.F mumps-src/src/zfac_par_m.F
        USE MUMPS_TPS_M
        USE ZMUMPS_TPS_M
        USE ZMUMPS_STRUC_DEF, ONLY : ZMUMPS_ROOT_STRUC
-diff -ru MUMPS_5.7.3/src/zsol_omp_m.F mumps-src/src/zsol_omp_m.F
+diff -ruN MUMPS_5.7.3/src/zmumps_struc_def.F mumps-src/src/zmumps_struc_def.F
+--- MUMPS_5.7.3/src/zmumps_struc_def.F	2024-07-15 05:44:53.000000000 -0600
++++ mumps-src/src/zmumps_struc_def.F	2024-12-28 14:51:55.274345218 -0700
+@@ -12,5 +12,6 @@
+ C  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
+ C
+        MODULE ZMUMPS_STRUC_DEF
++       USE,INTRINSIC :: ISO_FORTRAN_ENV, ONLY: INT64, REAL64
+        INCLUDE 'zmumps_struc.h'
+        END MODULE ZMUMPS_STRUC_DEF
+diff -ruN MUMPS_5.7.3/src/zsol_omp_m.F mumps-src/src/zsol_omp_m.F
 --- MUMPS_5.7.3/src/zsol_omp_m.F	2024-07-15 05:44:53.000000000 -0600
-+++ mumps-src/src/zsol_omp_m.F	2024-12-27 16:26:55.204198290 -0700
++++ mumps-src/src/zsol_omp_m.F	2024-12-28 11:46:44.080061018 -0700
 @@ -299,7 +299,7 @@
       &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
       &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
