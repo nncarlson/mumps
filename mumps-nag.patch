@@ -1,6 +1,6 @@
-diff -ruN MUMPS_5.7.3/include/cmumps_root.h mumps-src/include/cmumps_root.h
---- MUMPS_5.7.3/include/cmumps_root.h	2024-07-15 05:44:47.000000000 -0600
-+++ mumps-src/include/cmumps_root.h	2024-12-28 14:56:07.918885546 -0700
+diff -ru MUMPS_5.7.3.orig/include/cmumps_root.h MUMPS_5.7.3/include/cmumps_root.h
+--- MUMPS_5.7.3.orig/include/cmumps_root.h	2024-07-15 05:44:47.000000000 -0600
++++ MUMPS_5.7.3/include/cmumps_root.h	2024-12-29 15:49:20.966218104 -0700
 @@ -51,5 +51,5 @@
        TYPE CMUMPS_L0OMPFAC_T
           SEQUENCE
@@ -8,9 +8,9 @@ diff -ruN MUMPS_5.7.3/include/cmumps_root.h mumps-src/include/cmumps_root.h
 -         INTEGER(8) :: LA
 +         INTEGER(INT64) :: LA
        END TYPE CMUMPS_L0OMPFAC_T
-diff -ruN MUMPS_5.7.3/include/cmumps_struc.h mumps-src/include/cmumps_struc.h
---- MUMPS_5.7.3/include/cmumps_struc.h	2024-07-15 05:44:47.000000000 -0600
-+++ mumps-src/include/cmumps_struc.h	2024-12-28 11:46:44.076060851 -0700
+diff -ru MUMPS_5.7.3.orig/include/cmumps_struc.h MUMPS_5.7.3/include/cmumps_struc.h
+--- MUMPS_5.7.3.orig/include/cmumps_struc.h	2024-07-15 05:44:47.000000000 -0600
++++ MUMPS_5.7.3/include/cmumps_struc.h	2024-12-29 15:49:20.966218104 -0700
 @@ -43,7 +43,7 @@
  !    Assembled input matrix : User interface
  !    ----------------------------------------
@@ -80,9 +80,9 @@ diff -ruN MUMPS_5.7.3/include/cmumps_struc.h mumps-src/include/cmumps_struc.h
  ! Pool before L0_OMP
          INTEGER, DIMENSION(:), POINTER :: IPOOL_B_L0_OMP
  ! Pool after L0_OMP
-diff -ruN MUMPS_5.7.3/include/dmumps_root.h mumps-src/include/dmumps_root.h
---- MUMPS_5.7.3/include/dmumps_root.h	2024-07-15 05:44:47.000000000 -0600
-+++ mumps-src/include/dmumps_root.h	2024-12-28 14:56:20.395406075 -0700
+diff -ru MUMPS_5.7.3.orig/include/dmumps_root.h MUMPS_5.7.3/include/dmumps_root.h
+--- MUMPS_5.7.3.orig/include/dmumps_root.h	2024-07-15 05:44:47.000000000 -0600
++++ MUMPS_5.7.3/include/dmumps_root.h	2024-12-29 15:49:20.966218104 -0700
 @@ -28,28 +28,28 @@
          INTEGER, DIMENSION(:), POINTER :: RG2L
          INTEGER, DIMENSION(:), POINTER :: IPIV
@@ -121,9 +121,9 @@ diff -ruN MUMPS_5.7.3/include/dmumps_root.h mumps-src/include/dmumps_root.h
 +         REAL(REAL64), POINTER, DIMENSION(:) :: A
 +         INTEGER(INT64) :: LA
        END TYPE DMUMPS_L0OMPFAC_T
-diff -ruN MUMPS_5.7.3/include/dmumps_struc.h mumps-src/include/dmumps_struc.h
---- MUMPS_5.7.3/include/dmumps_struc.h	2024-07-15 05:44:47.000000000 -0600
-+++ mumps-src/include/dmumps_struc.h	2024-12-28 11:46:44.076060851 -0700
+diff -ru MUMPS_5.7.3.orig/include/dmumps_struc.h MUMPS_5.7.3/include/dmumps_struc.h
+--- MUMPS_5.7.3.orig/include/dmumps_struc.h	2024-07-15 05:44:47.000000000 -0600
++++ MUMPS_5.7.3/include/dmumps_struc.h	2024-12-29 15:49:20.966218104 -0700
 @@ -43,7 +43,7 @@
  !    Assembled input matrix : User interface
  !    ----------------------------------------
@@ -193,36 +193,9 @@ diff -ruN MUMPS_5.7.3/include/dmumps_struc.h mumps-src/include/dmumps_struc.h
  ! Pool before L0_OMP
          INTEGER, DIMENSION(:), POINTER :: IPOOL_B_L0_OMP
  ! Pool after L0_OMP
-diff -ruN MUMPS_5.7.3/include/mumps_int_def.h mumps-src/include/mumps_int_def.h
---- MUMPS_5.7.3/include/mumps_int_def.h	1969-12-31 17:00:00.000000000 -0700
-+++ mumps-src/include/mumps_int_def.h	2024-12-28 11:46:44.136063350 -0700
-@@ -0,0 +1,23 @@
-+/*
-+ *
-+ *  This file is part of MUMPS 5.7.3, released
-+ *  on Mon Jul 15 11:44:21 UTC 2024
-+ *
-+ *
-+ *  Copyright 1991-2024 CERFACS, CNRS, ENS Lyon, INP Toulouse, Inria,
-+ *  Mumps Technologies, University of Bordeaux.
-+ *
-+ *  This version of MUMPS is provided to you free of charge. It is
-+ *  released under the CeCILL-C license 
-+ *  (see doc/CeCILL-C_V1-en.txt, doc/CeCILL-C_V1-fr.txt, and
-+ *  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
-+ *
-+ */
-+#if ! defined(MUMPS_INT_H)
-+#   define MUMPS_INT_H
-+/*  MUMPS has been configured without -DINTSIZE64:
-+ *  both 32-bit and 64-bit integers are used, depending on usage
-+ *  (e.g., the order of a matrix, N, is a 32-bit integer, and the
-+ *  number of nonzeros, NNZ, is a 64-bit integers) */
-+#   define MUMPS_INTSIZE32
-+#endif
-diff -ruN MUMPS_5.7.3/include/smumps_root.h mumps-src/include/smumps_root.h
---- MUMPS_5.7.3/include/smumps_root.h	2024-07-15 05:44:47.000000000 -0600
-+++ mumps-src/include/smumps_root.h	2024-12-28 14:56:30.691835653 -0700
+diff -ru MUMPS_5.7.3.orig/include/smumps_root.h MUMPS_5.7.3/include/smumps_root.h
+--- MUMPS_5.7.3.orig/include/smumps_root.h	2024-07-15 05:44:47.000000000 -0600
++++ MUMPS_5.7.3/include/smumps_root.h	2024-12-29 15:49:20.967218146 -0700
 @@ -51,5 +51,5 @@
        TYPE SMUMPS_L0OMPFAC_T
           SEQUENCE
@@ -230,9 +203,9 @@ diff -ruN MUMPS_5.7.3/include/smumps_root.h mumps-src/include/smumps_root.h
 -         INTEGER(8) :: LA
 +         INTEGER(INT64) :: LA
        END TYPE SMUMPS_L0OMPFAC_T
-diff -ruN MUMPS_5.7.3/include/smumps_struc.h mumps-src/include/smumps_struc.h
---- MUMPS_5.7.3/include/smumps_struc.h	2024-07-15 05:44:47.000000000 -0600
-+++ mumps-src/include/smumps_struc.h	2024-12-28 11:46:44.076060851 -0700
+diff -ru MUMPS_5.7.3.orig/include/smumps_struc.h MUMPS_5.7.3/include/smumps_struc.h
+--- MUMPS_5.7.3.orig/include/smumps_struc.h	2024-07-15 05:44:47.000000000 -0600
++++ MUMPS_5.7.3/include/smumps_struc.h	2024-12-29 15:49:20.967218146 -0700
 @@ -43,7 +43,7 @@
  !    Assembled input matrix : User interface
  !    ----------------------------------------
@@ -302,9 +275,9 @@ diff -ruN MUMPS_5.7.3/include/smumps_struc.h mumps-src/include/smumps_struc.h
  ! Pool before L0_OMP
          INTEGER, DIMENSION(:), POINTER :: IPOOL_B_L0_OMP
  ! Pool after L0_OMP
-diff -ruN MUMPS_5.7.3/include/zmumps_root.h mumps-src/include/zmumps_root.h
---- MUMPS_5.7.3/include/zmumps_root.h	2024-07-15 05:44:47.000000000 -0600
-+++ mumps-src/include/zmumps_root.h	2024-12-28 14:56:39.559205595 -0700
+diff -ru MUMPS_5.7.3.orig/include/zmumps_root.h MUMPS_5.7.3/include/zmumps_root.h
+--- MUMPS_5.7.3.orig/include/zmumps_root.h	2024-07-15 05:44:47.000000000 -0600
++++ MUMPS_5.7.3/include/zmumps_root.h	2024-12-29 15:49:20.967218146 -0700
 @@ -28,20 +28,20 @@
          INTEGER, DIMENSION(:), POINTER :: RG2L
          INTEGER, DIMENSION(:), POINTER :: IPIV
@@ -340,9 +313,9 @@ diff -ruN MUMPS_5.7.3/include/zmumps_root.h mumps-src/include/zmumps_root.h
 +         COMPLEX(REAL64), POINTER, DIMENSION(:) :: A
 +         INTEGER(INT64) :: LA
        END TYPE ZMUMPS_L0OMPFAC_T
-diff -ruN MUMPS_5.7.3/include/zmumps_struc.h mumps-src/include/zmumps_struc.h
---- MUMPS_5.7.3/include/zmumps_struc.h	2024-07-15 05:44:47.000000000 -0600
-+++ mumps-src/include/zmumps_struc.h	2024-12-28 11:46:44.077060894 -0700
+diff -ru MUMPS_5.7.3.orig/include/zmumps_struc.h MUMPS_5.7.3/include/zmumps_struc.h
+--- MUMPS_5.7.3.orig/include/zmumps_struc.h	2024-07-15 05:44:47.000000000 -0600
++++ MUMPS_5.7.3/include/zmumps_struc.h	2024-12-29 15:49:20.967218146 -0700
 @@ -43,8 +43,8 @@
  !    Assembled input matrix : User interface
  !    ----------------------------------------
@@ -482,9 +455,9 @@ diff -ruN MUMPS_5.7.3/include/zmumps_struc.h mumps-src/include/zmumps_struc.h
  ! Pool before L0_OMP
          INTEGER, DIMENSION(:), POINTER :: IPOOL_B_L0_OMP
  ! Pool after L0_OMP
-diff -ruN MUMPS_5.7.3/src/cfac_b.F mumps-src/src/cfac_b.F
---- MUMPS_5.7.3/src/cfac_b.F	2024-07-15 05:44:52.000000000 -0600
-+++ mumps-src/src/cfac_b.F	2024-12-28 11:46:44.077060894 -0700
+diff -ru MUMPS_5.7.3.orig/src/cfac_b.F MUMPS_5.7.3/src/cfac_b.F
+--- MUMPS_5.7.3.orig/src/cfac_b.F	2024-07-15 05:44:52.000000000 -0600
++++ MUMPS_5.7.3/src/cfac_b.F	2024-12-29 15:49:20.968218187 -0700
 @@ -32,7 +32,7 @@
        USE CMUMPS_BUF, ONLY : CMUMPS_BUF_ALLOC_CB, CMUMPS_BUF_DEALL_CB
        USE CMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
@@ -503,9 +476,9 @@ diff -ruN MUMPS_5.7.3/src/cfac_b.F mumps-src/src/cfac_b.F
        USE MUMPS_TPS_M
        USE CMUMPS_TPS_M
        USE CMUMPS_STRUC_DEF, ONLY : CMUMPS_ROOT_STRUC
-diff -ruN MUMPS_5.7.3/src/cfac_par_m.F mumps-src/src/cfac_par_m.F
---- MUMPS_5.7.3/src/cfac_par_m.F	2024-07-15 05:44:52.000000000 -0600
-+++ mumps-src/src/cfac_par_m.F	2024-12-28 11:46:44.077060894 -0700
+diff -ru MUMPS_5.7.3.orig/src/cfac_par_m.F MUMPS_5.7.3/src/cfac_par_m.F
+--- MUMPS_5.7.3.orig/src/cfac_par_m.F	2024-07-15 05:44:52.000000000 -0600
++++ MUMPS_5.7.3/src/cfac_par_m.F	2024-12-29 15:49:20.968218187 -0700
 @@ -41,7 +41,6 @@
        USE CMUMPS_FAC2_LDLT_M
        USE CMUMPS_FAC1_LU_M
@@ -514,9 +487,9 @@ diff -ruN MUMPS_5.7.3/src/cfac_par_m.F mumps-src/src/cfac_par_m.F
        USE MUMPS_TPS_M
        USE CMUMPS_TPS_M
        USE CMUMPS_STRUC_DEF, ONLY : CMUMPS_ROOT_STRUC
-diff -ruN MUMPS_5.7.3/src/cmumps_struc_def.F mumps-src/src/cmumps_struc_def.F
---- MUMPS_5.7.3/src/cmumps_struc_def.F	2024-07-15 05:44:51.000000000 -0600
-+++ mumps-src/src/cmumps_struc_def.F	2024-12-28 14:51:12.530561948 -0700
+diff -ru MUMPS_5.7.3.orig/src/cmumps_struc_def.F MUMPS_5.7.3/src/cmumps_struc_def.F
+--- MUMPS_5.7.3.orig/src/cmumps_struc_def.F	2024-07-15 05:44:51.000000000 -0600
++++ MUMPS_5.7.3/src/cmumps_struc_def.F	2024-12-29 15:49:20.968218187 -0700
 @@ -12,5 +12,6 @@
  C  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
  C
@@ -524,9 +497,9 @@ diff -ruN MUMPS_5.7.3/src/cmumps_struc_def.F mumps-src/src/cmumps_struc_def.F
 +       USE,INTRINSIC :: ISO_FORTRAN_ENV, ONLY: INT64
         INCLUDE 'cmumps_struc.h'
         END MODULE CMUMPS_STRUC_DEF
-diff -ruN MUMPS_5.7.3/src/csol_omp_m.F mumps-src/src/csol_omp_m.F
---- MUMPS_5.7.3/src/csol_omp_m.F	2024-07-15 05:44:51.000000000 -0600
-+++ mumps-src/src/csol_omp_m.F	2024-12-28 11:46:44.078060935 -0700
+diff -ru MUMPS_5.7.3.orig/src/csol_omp_m.F MUMPS_5.7.3/src/csol_omp_m.F
+--- MUMPS_5.7.3.orig/src/csol_omp_m.F	2024-07-15 05:44:51.000000000 -0600
++++ MUMPS_5.7.3/src/csol_omp_m.F	2024-12-29 15:49:20.968218187 -0700
 @@ -299,7 +299,7 @@
       &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
       &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
@@ -536,9 +509,9 @@ diff -ruN MUMPS_5.7.3/src/csol_omp_m.F mumps-src/src/csol_omp_m.F
        IMPLICIT NONE
        INTEGER, INTENT( in ) :: N, MTYPE, NRHS, SLAVEF, LIW
        INTEGER, INTENT( in ) :: IW(LIW)
-diff -ruN MUMPS_5.7.3/src/dfac_b.F mumps-src/src/dfac_b.F
---- MUMPS_5.7.3/src/dfac_b.F	2024-07-15 05:44:50.000000000 -0600
-+++ mumps-src/src/dfac_b.F	2024-12-28 11:46:44.078060935 -0700
+diff -ru MUMPS_5.7.3.orig/src/dfac_b.F MUMPS_5.7.3/src/dfac_b.F
+--- MUMPS_5.7.3.orig/src/dfac_b.F	2024-07-15 05:44:50.000000000 -0600
++++ MUMPS_5.7.3/src/dfac_b.F	2024-12-29 15:49:20.969218229 -0700
 @@ -32,7 +32,7 @@
        USE DMUMPS_BUF, ONLY : DMUMPS_BUF_ALLOC_CB, DMUMPS_BUF_DEALL_CB
        USE DMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
@@ -557,9 +530,9 @@ diff -ruN MUMPS_5.7.3/src/dfac_b.F mumps-src/src/dfac_b.F
        USE MUMPS_TPS_M
        USE DMUMPS_TPS_M
        USE DMUMPS_STRUC_DEF, ONLY : DMUMPS_ROOT_STRUC
-diff -ruN MUMPS_5.7.3/src/dfac_par_m.F mumps-src/src/dfac_par_m.F
---- MUMPS_5.7.3/src/dfac_par_m.F	2024-07-15 05:44:50.000000000 -0600
-+++ mumps-src/src/dfac_par_m.F	2024-12-28 11:46:44.078060935 -0700
+diff -ru MUMPS_5.7.3.orig/src/dfac_par_m.F MUMPS_5.7.3/src/dfac_par_m.F
+--- MUMPS_5.7.3.orig/src/dfac_par_m.F	2024-07-15 05:44:50.000000000 -0600
++++ MUMPS_5.7.3/src/dfac_par_m.F	2024-12-29 15:49:20.969218229 -0700
 @@ -41,7 +41,6 @@
        USE DMUMPS_FAC2_LDLT_M
        USE DMUMPS_FAC1_LU_M
@@ -568,9 +541,9 @@ diff -ruN MUMPS_5.7.3/src/dfac_par_m.F mumps-src/src/dfac_par_m.F
        USE MUMPS_TPS_M
        USE DMUMPS_TPS_M
        USE DMUMPS_STRUC_DEF, ONLY : DMUMPS_ROOT_STRUC
-diff -ruN MUMPS_5.7.3/src/dmumps_struc_def.F mumps-src/src/dmumps_struc_def.F
---- MUMPS_5.7.3/src/dmumps_struc_def.F	2024-07-15 05:44:49.000000000 -0600
-+++ mumps-src/src/dmumps_struc_def.F	2024-12-28 14:49:50.597143672 -0700
+diff -ru MUMPS_5.7.3.orig/src/dmumps_struc_def.F MUMPS_5.7.3/src/dmumps_struc_def.F
+--- MUMPS_5.7.3.orig/src/dmumps_struc_def.F	2024-07-15 05:44:49.000000000 -0600
++++ MUMPS_5.7.3/src/dmumps_struc_def.F	2024-12-29 15:49:20.969218229 -0700
 @@ -12,5 +12,6 @@
  C  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
  C
@@ -578,9 +551,9 @@ diff -ruN MUMPS_5.7.3/src/dmumps_struc_def.F mumps-src/src/dmumps_struc_def.F
 +       USE,INTRINSIC :: ISO_FORTRAN_ENV, only: INT64, REAL64
         INCLUDE 'dmumps_struc.h'
         END MODULE DMUMPS_STRUC_DEF
-diff -ruN MUMPS_5.7.3/src/dsol_omp_m.F mumps-src/src/dsol_omp_m.F
---- MUMPS_5.7.3/src/dsol_omp_m.F	2024-07-15 05:44:49.000000000 -0600
-+++ mumps-src/src/dsol_omp_m.F	2024-12-28 11:46:44.078060935 -0700
+diff -ru MUMPS_5.7.3.orig/src/dsol_omp_m.F MUMPS_5.7.3/src/dsol_omp_m.F
+--- MUMPS_5.7.3.orig/src/dsol_omp_m.F	2024-07-15 05:44:49.000000000 -0600
++++ MUMPS_5.7.3/src/dsol_omp_m.F	2024-12-29 15:49:20.969218229 -0700
 @@ -299,7 +299,7 @@
       &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
       &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
@@ -590,9 +563,9 @@ diff -ruN MUMPS_5.7.3/src/dsol_omp_m.F mumps-src/src/dsol_omp_m.F
        IMPLICIT NONE
        INTEGER, INTENT( in ) :: N, MTYPE, NRHS, SLAVEF, LIW
        INTEGER, INTENT( in ) :: IW(LIW)
-diff -ruN MUMPS_5.7.3/src/sfac_b.F mumps-src/src/sfac_b.F
---- MUMPS_5.7.3/src/sfac_b.F	2024-07-15 05:44:48.000000000 -0600
-+++ mumps-src/src/sfac_b.F	2024-12-28 11:46:44.079060977 -0700
+diff -ru MUMPS_5.7.3.orig/src/sfac_b.F MUMPS_5.7.3/src/sfac_b.F
+--- MUMPS_5.7.3.orig/src/sfac_b.F	2024-07-15 05:44:48.000000000 -0600
++++ MUMPS_5.7.3/src/sfac_b.F	2024-12-29 15:49:20.970218270 -0700
 @@ -32,7 +32,7 @@
        USE SMUMPS_BUF, ONLY : SMUMPS_BUF_ALLOC_CB, SMUMPS_BUF_DEALL_CB
        USE SMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
@@ -611,9 +584,9 @@ diff -ruN MUMPS_5.7.3/src/sfac_b.F mumps-src/src/sfac_b.F
        USE MUMPS_TPS_M
        USE SMUMPS_TPS_M
        USE SMUMPS_STRUC_DEF, ONLY : SMUMPS_ROOT_STRUC
-diff -ruN MUMPS_5.7.3/src/sfac_par_m.F mumps-src/src/sfac_par_m.F
---- MUMPS_5.7.3/src/sfac_par_m.F	2024-07-15 05:44:48.000000000 -0600
-+++ mumps-src/src/sfac_par_m.F	2024-12-28 11:46:44.079060977 -0700
+diff -ru MUMPS_5.7.3.orig/src/sfac_par_m.F MUMPS_5.7.3/src/sfac_par_m.F
+--- MUMPS_5.7.3.orig/src/sfac_par_m.F	2024-07-15 05:44:48.000000000 -0600
++++ MUMPS_5.7.3/src/sfac_par_m.F	2024-12-29 15:49:20.970218270 -0700
 @@ -41,7 +41,6 @@
        USE SMUMPS_FAC2_LDLT_M
        USE SMUMPS_FAC1_LU_M
@@ -622,9 +595,9 @@ diff -ruN MUMPS_5.7.3/src/sfac_par_m.F mumps-src/src/sfac_par_m.F
        USE MUMPS_TPS_M
        USE SMUMPS_TPS_M
        USE SMUMPS_STRUC_DEF, ONLY : SMUMPS_ROOT_STRUC
-diff -ruN MUMPS_5.7.3/src/smumps_struc_def.F mumps-src/src/smumps_struc_def.F
---- MUMPS_5.7.3/src/smumps_struc_def.F	2024-07-15 05:44:47.000000000 -0600
-+++ mumps-src/src/smumps_struc_def.F	2024-12-28 14:50:36.088041561 -0700
+diff -ru MUMPS_5.7.3.orig/src/smumps_struc_def.F MUMPS_5.7.3/src/smumps_struc_def.F
+--- MUMPS_5.7.3.orig/src/smumps_struc_def.F	2024-07-15 05:44:47.000000000 -0600
++++ MUMPS_5.7.3/src/smumps_struc_def.F	2024-12-29 15:49:20.970218270 -0700
 @@ -12,5 +12,6 @@
  C  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
  C
@@ -632,9 +605,9 @@ diff -ruN MUMPS_5.7.3/src/smumps_struc_def.F mumps-src/src/smumps_struc_def.F
 +       USE,INTRINSIC :: ISO_FORTRAN_ENV, only: INT64
         INCLUDE 'smumps_struc.h'
         END MODULE SMUMPS_STRUC_DEF
-diff -ruN MUMPS_5.7.3/src/ssol_omp_m.F mumps-src/src/ssol_omp_m.F
---- MUMPS_5.7.3/src/ssol_omp_m.F	2024-07-15 05:44:48.000000000 -0600
-+++ mumps-src/src/ssol_omp_m.F	2024-12-28 11:46:44.079060977 -0700
+diff -ru MUMPS_5.7.3.orig/src/ssol_omp_m.F MUMPS_5.7.3/src/ssol_omp_m.F
+--- MUMPS_5.7.3.orig/src/ssol_omp_m.F	2024-07-15 05:44:48.000000000 -0600
++++ MUMPS_5.7.3/src/ssol_omp_m.F	2024-12-29 15:49:20.970218270 -0700
 @@ -299,7 +299,7 @@
       &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
       &  L0_OMP_FACTORS, LL0_OMP_FACTORS )
@@ -644,9 +617,9 @@ diff -ruN MUMPS_5.7.3/src/ssol_omp_m.F mumps-src/src/ssol_omp_m.F
        IMPLICIT NONE
        INTEGER, INTENT( in ) :: N, MTYPE, NRHS, SLAVEF, LIW
        INTEGER, INTENT( in ) :: IW(LIW)
-diff -ruN MUMPS_5.7.3/src/zfac_b.F mumps-src/src/zfac_b.F
---- MUMPS_5.7.3/src/zfac_b.F	2024-07-15 05:44:53.000000000 -0600
-+++ mumps-src/src/zfac_b.F	2024-12-28 11:46:44.079060977 -0700
+diff -ru MUMPS_5.7.3.orig/src/zfac_b.F MUMPS_5.7.3/src/zfac_b.F
+--- MUMPS_5.7.3.orig/src/zfac_b.F	2024-07-15 05:44:53.000000000 -0600
++++ MUMPS_5.7.3/src/zfac_b.F	2024-12-29 15:49:20.971218311 -0700
 @@ -32,7 +32,7 @@
        USE ZMUMPS_BUF, ONLY : ZMUMPS_BUF_ALLOC_CB, ZMUMPS_BUF_DEALL_CB
        USE ZMUMPS_FAC_S_IS_POINTERS_M, ONLY : S_IS_POINTERS_T
@@ -665,9 +638,9 @@ diff -ruN MUMPS_5.7.3/src/zfac_b.F mumps-src/src/zfac_b.F
        USE MUMPS_TPS_M
        USE ZMUMPS_TPS_M
        USE ZMUMPS_STRUC_DEF, ONLY : ZMUMPS_ROOT_STRUC
-diff -ruN MUMPS_5.7.3/src/zfac_par_m.F mumps-src/src/zfac_par_m.F
---- MUMPS_5.7.3/src/zfac_par_m.F	2024-07-15 05:44:54.000000000 -0600
-+++ mumps-src/src/zfac_par_m.F	2024-12-28 11:46:44.080061018 -0700
+diff -ru MUMPS_5.7.3.orig/src/zfac_par_m.F MUMPS_5.7.3/src/zfac_par_m.F
+--- MUMPS_5.7.3.orig/src/zfac_par_m.F	2024-07-15 05:44:54.000000000 -0600
++++ MUMPS_5.7.3/src/zfac_par_m.F	2024-12-29 15:49:20.971218311 -0700
 @@ -41,7 +41,6 @@
        USE ZMUMPS_FAC2_LDLT_M
        USE ZMUMPS_FAC1_LU_M
@@ -676,9 +649,9 @@ diff -ruN MUMPS_5.7.3/src/zfac_par_m.F mumps-src/src/zfac_par_m.F
        USE MUMPS_TPS_M
        USE ZMUMPS_TPS_M
        USE ZMUMPS_STRUC_DEF, ONLY : ZMUMPS_ROOT_STRUC
-diff -ruN MUMPS_5.7.3/src/zmumps_struc_def.F mumps-src/src/zmumps_struc_def.F
---- MUMPS_5.7.3/src/zmumps_struc_def.F	2024-07-15 05:44:53.000000000 -0600
-+++ mumps-src/src/zmumps_struc_def.F	2024-12-28 14:51:55.274345218 -0700
+diff -ru MUMPS_5.7.3.orig/src/zmumps_struc_def.F MUMPS_5.7.3/src/zmumps_struc_def.F
+--- MUMPS_5.7.3.orig/src/zmumps_struc_def.F	2024-07-15 05:44:53.000000000 -0600
++++ MUMPS_5.7.3/src/zmumps_struc_def.F	2024-12-29 15:49:20.971218311 -0700
 @@ -12,5 +12,6 @@
  C  https://cecill.info/licences/Licence_CeCILL-C_V1-en.html)
  C
@@ -686,9 +659,9 @@ diff -ruN MUMPS_5.7.3/src/zmumps_struc_def.F mumps-src/src/zmumps_struc_def.F
 +       USE,INTRINSIC :: ISO_FORTRAN_ENV, ONLY: INT64, REAL64
         INCLUDE 'zmumps_struc.h'
         END MODULE ZMUMPS_STRUC_DEF
-diff -ruN MUMPS_5.7.3/src/zsol_omp_m.F mumps-src/src/zsol_omp_m.F
---- MUMPS_5.7.3/src/zsol_omp_m.F	2024-07-15 05:44:53.000000000 -0600
-+++ mumps-src/src/zsol_omp_m.F	2024-12-28 11:46:44.080061018 -0700
+diff -ru MUMPS_5.7.3.orig/src/zsol_omp_m.F MUMPS_5.7.3/src/zsol_omp_m.F
+--- MUMPS_5.7.3.orig/src/zsol_omp_m.F	2024-07-15 05:44:53.000000000 -0600
++++ MUMPS_5.7.3/src/zsol_omp_m.F	2024-12-29 15:49:20.971218311 -0700
 @@ -299,7 +299,7 @@
       &  PERM_L0_OMP, PTR_LEAFS_L0_OMP, L0_OMP_MAPPING, LL0_OMP_MAPPING,
       &  L0_OMP_FACTORS, LL0_OMP_FACTORS )

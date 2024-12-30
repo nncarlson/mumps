@@ -12,7 +12,7 @@ endif()
 
 project(MUMPS
 LANGUAGES C Fortran
-VERSION 5.7.3.2
+VERSION 5.7.3
 DESCRIPTION "Sparse direct parallel solver"
 HOMEPAGE_URL "http://mumps-solver.org/"
 )
@@ -61,7 +61,8 @@ if(MUMPS_parallel)
 
   # avoid MPICH -fallow flag leakage
   set(NUMERIC_INC ${MPI_Fortran_INCLUDE_DIRS})
-  list(APPEND NUMERIC_LIBS ${MPI_Fortran_LIBRARIES} MPI::MPI_C)
+  #list(APPEND NUMERIC_LIBS ${MPI_Fortran_LIBRARIES} MPI::MPI_C)
+  list(APPEND NUMERIC_LIBS MPI::MPI_Fortran)
 
   if(MUMPS_openmp)
     find_package(OpenMP COMPONENTS C Fortran REQUIRED)
@@ -116,12 +117,14 @@ message(STATUS "MUMPS SCALAPACK_VENDOR: ${SCALAPACK_VENDOR}")
 # --- download MUMPS source
 include(FetchContent)
 
-set(url "https://mumps-solver.org/MUMPS_${MUMPS_UPSTREAM_VERSION}.tar.gz")
+# Get url from the cmake command line
+#set(url "https://mumps-solver.org/MUMPS_${MUMPS_UPSTREAM_VERSION}.tar.gz")
 
 set(FETCHCONTENT_QUIET no)
 
 FetchContent_Populate(${PROJECT_NAME} URL ${url}
-	PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/mumps-nag.patch)
+  PATCH_COMMAND patch -p1 --input=${PROJECT_SOURCE_DIR}/mumps-nag.patch
+)
 
 # --- MUMPS build
 
